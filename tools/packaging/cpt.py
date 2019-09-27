@@ -27,8 +27,6 @@ import sys
 if sys.version_info < (3, 0):
     # Python 2.x
     from urllib2 import urlopen
-    from HTMLParser import HTMLParser
-
     input = raw_input
 else:
     # Python 3.x
@@ -1202,14 +1200,6 @@ def check_win(pkg):
         else:
             print(pkg.ljust(20) + '[OK]'.ljust(30))
 
-class NSISVersionParser(HTMLParser):
-    def __init__(self):
-        HTMLParser.__init__(self)
-        self.out = None
-    def handle_data(self, data):
-        r = re.match(r'^v(?:\d+)(?!(a|b|rc)(?:\d+)?)$', data)
-        if r:
-            self.out = r.group()
 
 def is_os_64bit():
     return platform.machine().endswith('64')
@@ -1220,10 +1210,7 @@ def get_win_dep():
         box_draw("Download NSIS compiler")
         html = urlopen('https://sourceforge.net/p/nsis/code/6780/log/?path=/NSIS/tags').read().decode('utf-8')
         pin = '<p>Tagging for release'
-        nsis_parser = NSISVersionParser()
-        nsis_parser.feed(html)
-        NSIS_VERSION = nsis_parser.out
-        NSIS_VERSION = NSIS_VERSION[1:2] + '.' + NSIS_VERSION[2:3]
+        NSIS_VERSION = html[html.find(pin):html.find('</div>', html.find(pin))].strip(pin + ' ')
         print('Latest version of NSIS is: ' + NSIS_VERSION)
         wget(url="https://sourceforge.net/projects/nsis/files/NSIS%%203/%s/nsis-%s.zip" % (
             NSIS_VERSION, NSIS_VERSION),
