@@ -46,7 +46,6 @@ from email.utils import formatdate
 from datetime import tzinfo
 import time
 import multiprocessing
-import fileinput
 import stat
 import json
 
@@ -471,7 +470,6 @@ def compile(arg):
     travis_fold_start("compile")
     global prefix, EXTRA_CMAKE_FLAGS
     prefix = arg
-    PYTHON = sys.executable
 
     # Cleanup previous installation directory if any
     if os.path.isdir(prefix):
@@ -1535,7 +1533,6 @@ def check_mac(pkg):
 def make_dmg():
     box_draw("Building Apple Disk Image")
     APP_NAME = 'Cling'
-    DMG_BACKGROUND_IMG = 'graphic.png'
     APP_EXE = '%s.app/Contents/MacOS/bin/%s' % (APP_NAME, APP_NAME.lower())
     VOL_NAME = "%s-%s" % (APP_NAME.lower(), VERSION)
     DMG_TMP = "%s-temp.dmg" % (VOL_NAME)
