@@ -1,0 +1,70 @@
+name: C/C++ CI
+
+on: 
+  push:
+    branches:
+      - master
+      - github-actions-1
+  pull_request:
+    branches: 
+      - master
+      - github-actions-1 
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.cfg.os }}
+    strategy:
+      matrix:
+        cfg:
+         - { os: ubuntu-16.04, compiler: gcc, version: "7" }
+         - { os: ubuntu-16.04, compiler: clang, version: "6.0" }
+         - { os: ubuntu-18.04, compiler: gcc, version: "4.8" }
+         - { os: ubuntu-18.04, compiler: gcc, version: "5" }
+         - { os: ubuntu-18.04, compiler: gcc, version: "6" }
+         - { os: ubuntu-18.04, compiler: gcc, version: "7" }
+         - { os: ubuntu-18.04, compiler: clang, version: "3.9" }
+         - { os: ubuntu-18.04, compiler: clang, version: "7" }
+         - { os: macOS-latest, xcode-version: 11.2.1, compiler: clang }
+         - { os: macOS-latest, compiler: gcc, version: "9" }
+    
+    steps:
+    - uses: actions/checkout@v1 
+    - name: Setup compiler on Linux
+      run: |
+        sudo apt-get update
+        if [ "${{ matrix.cfg.compiler }}" = "gcc" ]; then
+          sudo apt-get install -y gcc-${{ matrix.cfg.version }} g++-${{ matrix.cfg.version }}
+          echo "::set-env name=CC::gcc-${{ matrix.cfg.version }}"
+          echo "::set-env name=CXX::g++-${{ matrix.cfg.version }}"
+        else
+          sudo apt-get install -y clang-${{ matrix.cfg.version }}
+          echo "::set-env name=CC::clang-${{ matrix.cfg.version }}"
+          echo "::set-env name=CXX::clang++-${{ matrix.cfg.version }}"
+        fi
+      if: runner.os == 'Linux'
+      shell: bash
+    - name: Setup compiler on OS X
+      run: |
+        curl -LO https://raw.githubusercontent.com/GiovanniBussi/macports-ci/master/macports-ci; source ./macports-ci install
+        if [ "${{ matrix.cfg.compiler }}" = "gcc" ]; then
+          brew install gcc@${{ matrix.cfg.version }}
+          echo "::set-env name=CC::gcc-${{ matrix.cfg.version }}"
+          echo "::set-env name=CXX::g++-${{ matrix.cfg.version }}"
+        else
+          sudo xcode-select -switch /Applications/Xcode_${{ matrix.cfg.xcode-version }}.app
+          echo "::set-env name=CC::clang"
+          echo "::set-env name=CXX::clang++"
+        fi
+      if: runner.os == 'macOS'
+    - name: Execute cpt
+      run: |
+        if [ "${{ matrix.cfg.compiler }}" = "gcc" && "${{ matrix.cfg.version }}" = "7" ]; then
+          export CLING_BUILD_FLAGS="-DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=ON"
+          if [ "${{ matrix.cfg.os }}" != 'macOS-latest' ]; then
+            export CLING_BUILD_FLAGS="$CLING_BUILD_FLAGS -DCXX_EXTENSIONS=OFF"
+          fi
+        fi
+        export CLING_BUILD_FLAGS="$CLING_BUILD_FLAGS -DLLVM_ENABLE_WARNINGS=OFF -DCLING_ENABLE_WARNINGS=ON"
+        ./cpt.py -y --check-requirements --current-dev=tar --with-cmake-flags="$CLING_BUILD_FLAGS"
+      working-directory: tools/packaging/
