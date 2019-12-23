@@ -61,10 +61,10 @@ jobs:
       run: |
         if [ "${{ matrix.cfg.compiler }}" = "gcc" && "${{ matrix.cfg.version }}" = "7" ]; then
           export CLING_BUILD_FLAGS="-DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=ON"
-          if [ "${{ matrix.cfg.os }}" != 'macOS-latest' ]; then
+          if [ "${{ matrix.cfg.os }}" != "macOS-latest" ]; then
             export CLING_BUILD_FLAGS="$CLING_BUILD_FLAGS -DCXX_EXTENSIONS=OFF"
           fi
         fi
         export CLING_BUILD_FLAGS="$CLING_BUILD_FLAGS -DLLVM_ENABLE_WARNINGS=OFF -DCLING_ENABLE_WARNINGS=ON"
-        ./cpt.py -y --check-requirements --current-dev=tar --with-cmake-flags="$CLING_BUILD_FLAGS"
+        ./cpt.py -y --check-requirements --current-dev=tar --with-cmake-flags="$CLING_BUILD_FLAGS" --with-cling-url=https://github.com/GITHUB_REPOSITORY
       working-directory: tools/packaging/
