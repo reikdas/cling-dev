@@ -66,5 +66,5 @@ jobs:
           fi
         fi
         export CLING_BUILD_FLAGS="$CLING_BUILD_FLAGS -DLLVM_ENABLE_WARNINGS=OFF -DCLING_ENABLE_WARNINGS=ON"
-        ./cpt.py -y --check-requirements --current-dev=tar --with-cmake-flags="$CLING_BUILD_FLAGS" --with-cling-url=https://github.com/GITHUB_REPOSITORY
+        ./cpt.py -y --check-requirements --current-dev=tar --with-cmake-flags="$CLING_BUILD_FLAGS" --with-cling-url=https://github.com/$GITHUB_REPOSITORY
       working-directory: tools/packaging/
