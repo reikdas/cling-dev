@@ -907,6 +907,16 @@ def check_ubuntu(pkg):
         else:
             print(pkg.ljust(20) + '[NOT INSTALLED]'.ljust(30))
             return False
+    elif pkg == "devscripts":
+        if exec_subprocess_check_output('which debuild', workdir) != '':
+            print(pkg.ljust(20) + '[OK]'.ljust(30))
+            return True
+        else:
+            print(pkg.ljust(20) + '[NOT INSTALLED]'.ljust(30))
+            return False
+    elif pkg == "debhelper":
+            # Unable to check if installed
+            return False
     elif exec_subprocess_check_output("dpkg-query -W -f='${Status}' %s 2>/dev/null | grep -c 'ok installed'" % (pkg),
                                       '/').strip() == '0':
         print(pkg.ljust(20) + '[NOT INSTALLED]'.ljust(30))
