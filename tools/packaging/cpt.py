@@ -893,13 +893,6 @@ def check_ubuntu(pkg):
         else:
             print(pkg.ljust(20) + '[NOT INSTALLED]'.ljust(30))
             return False
-    elif pkg == "lit":
-        if exec_subprocess_check_output('which lit', workdir) != '':
-            print(pkg.ljust(20) + '[OK]'.ljust(30))
-            return True
-        else:
-            print(pkg.ljust(20) + '[NOT INSTALLED]'.ljust(30))
-            return False
     elif pkg == 'llvm-'+llvm_vers+'-dev':
         if exec_subprocess_check_output('which llvm-config-{0}'.format(llvm_vers), workdir) != '':
             print(pkg.ljust(20) + '[OK]'.ljust(30))
@@ -915,7 +908,14 @@ def check_ubuntu(pkg):
             print(pkg.ljust(20) + '[NOT INSTALLED]'.ljust(30))
             return False
     elif pkg == "debhelper":
-            # Unable to check if installed
+        # Unable to check if installed
+        return False
+    elif pkg == "git" or pkg == "lit":
+        if exec_subprocess_check_output('which {0}'.format(pkg), workdir) != '':
+            print(pkg.ljust(20) + '[OK]'.ljust(30))
+            return True
+        else:
+            print(pkg.ljust(20) + '[NOT INSTALLED]'.ljust(30))
             return False
     elif exec_subprocess_check_output("dpkg-query -W -f='${Status}' %s 2>/dev/null | grep -c 'ok installed'" % (pkg),
                                       '/').strip() == '0':
