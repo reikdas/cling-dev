@@ -287,10 +287,10 @@ def download_llvm_binary():
                        os.path.join(srcdir, 'lib'), os.path.join(srcdir, 'include'), os.path.join(srcdir, 'bin', 'llvm-tblgen'),
                        os.path.join(srcdir, 'bin'))
         if DIST=="Ubuntu" and REV=='16.04' and is_os_64bit():
-            download_link = 'http://releases.llvm.org/5.0.2/clang+llvm-5.0.2-x86_64-linux-gnu-ubuntu-16.04.tar.xz'
+            download_link = 'https://releases.llvm.org/5.0.0/clang+llvm-5.0.0-linux-x86_64-ubuntu16.04.tar.xz'
             exec_subprocess_call('wget %s' % download_link, workdir)
-            exec_subprocess_call('tar xvf clang+llvm-5.0.2-x86_64-linux-gnu-ubuntu-16.04.tar.xz', workdir)
-            exec_subprocess_call('mv clang+llvm-5.0.2-x86_64-linux-gnu-ubuntu-16.04 %s' % srcdir, workdir)
+            exec_subprocess_call('tar xvf clang+llvm-5.0.0-linux-x86_64-ubuntu16.04.tar.xz', workdir)
+            exec_subprocess_call('mv clang+llvm-5.0.0-linux-x86_64-ubuntu16.04 %s' % srcdir, workdir)
         elif DIST=="Ubuntu" and REV=='14.04' and is_os_64bit():
             download_link = 'http://releases.llvm.org/5.0.2/clang+llvm-5.0.2-x86_64-linux-gnu-ubuntu-14.04.tar.xz'
             exec_subprocess_call('wget %s' % download_link, workdir)
