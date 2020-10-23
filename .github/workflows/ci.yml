@@ -17,75 +17,179 @@ jobs:
       matrix:
 
         include:
-          - name: ubuntu-16.04-gcc-4.8-compile
+          - name: ubuntu-16.04-gcc-4.8-compile-py2
             os: ubuntu-16.04
             compiler: gcc
             version: "4.8"
+            python-version: 2.7
 
-          - name: ubuntu-16.04-gcc-5
+          - name: ubuntu-16.04-gcc-4.8-compile-py36
+            os: ubuntu-16.04
+            compiler: gcc
+            version: "4.8"
+            python-version: 3.6
+
+          - name: ubuntu-16.04-gcc-4.8-compile-py37
+            os: ubuntu-16.04
+            compiler: gcc
+            version: "4.8"
+            python-version: 3.7
+
+          - name: ubuntu-16.04-gcc-4.8-compile-py38
+            os: ubuntu-16.04
+            compiler: gcc
+            version: "4.8"
+            python-version: 3.8
+
+          - name: ubuntu-16.04-gcc-5-py2
             os: ubuntu-16.04
             compiler: gcc
             version: "5"
+            python-version: 2.7
+
+          - name: ubuntu-16.04-gcc-5-py36
+            os: ubuntu-16.04
+            compiler: gcc
+            version: "5"
+            python-version: 3.6
+
+          - name: ubuntu-16.04-gcc-5-py37
+            os: ubuntu-16.04
+            compiler: gcc
+            version: "5"
+            python-version: 3.7
+
+          - name: ubuntu-16.04-gcc-5-py38
+            os: ubuntu-16.04
+            compiler: gcc
+            version: "5"
+            python-version: 3.8
 
           - name: ubuntu-16.04-gcc-6
             os: ubuntu-16.04
             compiler: gcc
             version: "6"
+            python-version: 3.8
 
           - name: ubuntu-16.04-gcc-7
             os: ubuntu-16.04
             compiler: gcc
             version: "7"
+            python-version: 3.8
 
           - name: ubuntu-16.04-gcc-7-compile
             os: ubuntu-16.04
             compiler: gcc
             version: "7"
+            python-version: 3.8
 
-          - name: ubuntu-16.04-gcc-7-notar
+          - name: ubuntu-16.04-gcc-7-notar-py2
             os: ubuntu-16.04
             compiler: gcc
             version: "7"
+            python-version: 2.7
+
+          - name: ubuntu-16.04-gcc-7-notar-py36
+            os: ubuntu-16.04
+            compiler: gcc
+            version: "7"
+            python-version: 3.6
+
+          - name: ubuntu-16.04-gcc-7-notar-py37
+            os: ubuntu-16.04
+            compiler: gcc
+            version: "7"
+            python-version: 3.7
+
+          - name: ubuntu-16.04-gcc-7-notar-py38
+            os: ubuntu-16.04
+            compiler: gcc
+            version: "7"
+            python-version: 3.8
 
           - name: ubuntu-16.04-clang-3.9
             os: ubuntu-16.04
             compiler: clang
             version: "3.9"
+            python-version: 3.8
 
           - name: ubuntu-16.04-clang-6
             os: ubuntu-16.04
             compiler: clang
             version: "6.0"
+            python-version: 3.8
 
           - name: ubuntu-16.04-clang-6-compile
             os: ubuntu-16.04
             compiler: clang
             version: "6.0"
+            python-version: 3.8
 
           - name: ubuntu-18.04-gcc-7-notar
             os: ubuntu-18.04
             compiler: gcc
             version: "7"
+            python-version: 3.8
 
           - name: ubuntu-18.04-gcc-7-compile
             os: ubuntu-18.04
             compiler: gcc
             version: "7"
+            python-version: 3.8
 
           - name: ubuntu-18.04-clang-7-notar
             os: ubuntu-18.04
             compiler: clang
             version: "7"
+            python-version: 3.8
 
-          - name: macos-xcode-11.2.1
+          - name: macos-xcode-11.2.1-py2
             os: macOS-latest
             compiler: clang
             xcode-version: "11.2.1"
+            python-version: 2.7
 
-          - name: macos-xcode-11.2.1-compile
+          - name: macos-xcode-11.2.1-py36
             os: macOS-latest
             compiler: clang
             xcode-version: "11.2.1"
+            python-version: 3.6
+
+          - name: macos-xcode-11.2.1-py37
+            os: macOS-latest
+            compiler: clang
+            xcode-version: "11.2.1"
+            python-version: 3.7
+
+          - name: macos-xcode-11.2.1-py38
+            os: macOS-latest
+            compiler: clang
+            xcode-version: "11.2.1"
+            python-version: 3.8
+
+          - name: macos-xcode-11.2.1-compile-py2
+            os: macOS-latest
+            compiler: clang
+            xcode-version: "11.2.1"
+            python-version: 2.7
+
+          - name: macos-xcode-11.2.1-compile-py36
+            os: macOS-latest
+            compiler: clang
+            xcode-version: "11.2.1"
+            python-version: 3.6
+
+          - name: macos-xcode-11.2.1-compile-py37
+            os: macOS-latest
+            compiler: clang
+            xcode-version: "11.2.1"
+            python-version: 3.7
+
+          - name: macos-xcode-11.2.1-compile-py38
+            os: macOS-latest
+            compiler: clang
+            xcode-version: "11.2.1"
+            python-version: 3.8
 
       #    - name: macos-xcode-11.2.1-notar
       #      os: macOS-latest
@@ -96,19 +200,26 @@ jobs:
             os: macOS-latest
             compiler: gcc
             version: "9"
+            python-version: 3.8
 
           - name: ubuntu-20.04-clang-7-compile
             os: ubuntu-20.04
             compiler: clang
             version: "7"
+            python-version: 3.8
 
           - name: ubuntu-20.04-gcc-7-compile
             os: ubuntu-20.04
             compiler: gcc
             version: "7"
+            python-version: 3.8
 
     steps:
     - uses: actions/checkout@v2
+    - name: Setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
     - name: Setup compiler on Linux
       run: |
         sudo apt-get update
@@ -146,10 +257,10 @@ jobs:
         fi
         export CLING_BUILD_FLAGS="$CLING_BUILD_FLAGS -DCLANG_ENABLE_ARCMT=OFF -DCLANG_ENABLE_STATIC_ANALYZER=OFF -DLLVM_ENABLE_WARNINGS=OFF -DCLING_ENABLE_WARNINGS=ON"
         if [[ ${{ matrix.name }} == *"compile"* ]]; then
-          ./cpt.py -y --check-requirements --current-dev=tar --with-cmake-flags="$CLING_BUILD_FLAGS" --with-cling-url=https://github.com/$GITHUB_REPOSITORY --cling-branch=${{ github.head_ref }}
+          python cpt.py -y --check-requirements --current-dev=tar --with-cmake-flags="$CLING_BUILD_FLAGS" --with-cling-url=https://github.com/$GITHUB_REPOSITORY --cling-branch=${{ github.head_ref }}
         elif [[ ${{ matrix.name }} == *"notar"* ]]; then
-          ./cpt.py -y --check-requirements --current-dev=tar --with-cmake-flags="$CLING_BUILD_FLAGS" --with-cling-url=https://github.com/$GITHUB_REPOSITORY --cling-branch=${{ github.head_ref }} --with-binary-llvm
+          python cpt.py -y --check-requirements --current-dev=tar --with-cmake-flags="$CLING_BUILD_FLAGS" --with-cling-url=https://github.com/$GITHUB_REPOSITORY --cling-branch=${{ github.head_ref }} --with-binary-llvm
         else
-          ./cpt.py -y --check-requirements --current-dev=tar --with-cmake-flags="$CLING_BUILD_FLAGS" --with-cling-url=https://github.com/$GITHUB_REPOSITORY --cling-branch=${{ github.head_ref }} --with-binary-llvm --with-llvm-tar
+          python cpt.py -y --check-requirements --current-dev=tar --with-cmake-flags="$CLING_BUILD_FLAGS" --with-cling-url=https://github.com/$GITHUB_REPOSITORY --cling-branch=${{ github.head_ref }} --with-binary-llvm --with-llvm-tar
         fi
       working-directory: tools/packaging/
